@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NEW DOWNLOADABLE WLED PALETTES</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg: #0e0f14;
+      --panel: #161925;
+      --text: #e6e6ea;
+      --muted: #9aa0ac;
+      --accent: #6ba8ff;
+      --border: #2a2f3d;
+    }
+    html,body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: linear-gradient(180deg, rgba(14,15,20,0.96), rgba(14,15,20,0.85));
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--border);
+    }
+    .head-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 16px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: 0.4px;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 18px auto 40px;
+      padding: 0 16px;
+    }
+
+    details.category {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin: 14px 0;
+      overflow: clip;
+    }
+    details.category > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+    }
+    details.category > summary::marker { display: none; }
+    .chev {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid var(--text);
+      border-bottom: 2px solid var(--text);
+      transform: rotate(-45deg);
+      transition: transform 0.2s ease;
+      opacity: 0.8;
+    }
+    details[open] .chev { transform: rotate(45deg); }
+    .count {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .cat-body {
+      border-top: 1px solid var(--border);
+      padding: 14px 12px 16px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .palette-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0f1220;
+    }
+    .grad-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .grad {
+      height: 40px;
+      min-width: 600px;
+      width: min(90vw, 900px);
+      border-radius: 6px;
+      border: 1px solid #00000040;
+      outline: 1px solid #ffffff18;
+    }
+    .meta {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .name { color: var(--text); }
+    .author::before { content: "• "; color: #ffffff28; }
+
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+      padding: 8px 12px 14px;
+    }
+
+    .order-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .error {
+      color: #ff7b7b;
+      background: #2a1e1e;
+      border: 1px solid #552c2c;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin: 16px 0;
+    }
+
+    @media (max-width: 640px) {
+      .grad { min-width: 600px; width: 600px; }
+      body { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="head-inner">
+    <h1>NEW DOWNLOADABLE WLED PALETTES</h1>
+    <div class="hint">Autoloads cpt_city_selection.json from the same folder.</div>
+  </div>
+</header>
+
+<main>
+  <div id="errorBox" class="error" style="display:none;"></div>
+  <div id="categories"></div>
+  <div class="order-note">Categories are shown in this order: Colorful, Gradient, Pastel, Themed, Striped, Monochrome.</div>
+</main>
+
+<script>
+  // Category order and display labels
+  const CATEGORY_KEYS = ["colorful","gradient","pastel","themed","striped","monochrome"];
+  const CATEGORY_LABEL = {
+    colorful: "Colorful",
+    gradient: "Gradient",
+    pastel: "Pastel",
+    themed: "Themed",
+    striped: "Striped",
+    monochrome: "Monochrome"
+  };
+
+  // Convert JSON "colors" to normalized stops: [{pos, rgb:string|[r,g,b]}]
+  function toStops(colors) {
+    if (!Array.isArray(colors) || colors.length === 0) return [];
+    // Already object stops?
+    if (typeof colors[0] === "object" && colors[0] && ("pos" in colors[0]) && ("rgb" in colors[0])) {
+      return colors.map(s => {
+        let rgb = s.rgb;
+        if (typeof rgb === "string") rgb = rgb.replace(/^#/, "").toLowerCase();
+        return { pos: Number(s.pos), rgb };
+      }).sort((a,b)=>a.pos-b.pos);
+    }
+    // Flat format [pos, "hex", pos, "hex", ...]
+    const out = [];
+    for (let i=0;i<colors.length-1;i+=2) {
+      const pos = Number(colors[i]);
+      let hex = String(colors[i+1] ?? "").trim().replace(/^#/, "").toLowerCase();
+      if (Number.isFinite(pos) && /^[0-9a-fA-F]{6}$/.test(hex)) {
+        out.push({ pos, rgb: hex });
+      }
+    }
+    return out.sort((a,b)=>a.pos-b.pos);
+  }
+
+  function gradientCSS(stops) {
+    return stops.map(s => {
+      if (typeof s.rgb === "string") {
+        return `#${s.rgb} ${s.pos/255*100}%`;
+      } else if (Array.isArray(s.rgb)) {
+        const [r,g,b] = s.rgb;
+        return `rgb(${r},${g},${b}) ${s.pos/255*100}%`;
+      } else {
+        return `#000000 ${s.pos/255*100}%`;
+      }
+    }).join(", ");
+  }
+
+  function makePaletteRow(p) {
+    const stops = toStops(p.colors);
+    const row = document.createElement("div");
+    row.className = "palette-row";
+
+    const gradWrap = document.createElement("div");
+    gradWrap.className = "grad-wrap";
+    const grad = document.createElement("div");
+    grad.className = "grad";
+    grad.style.background = "linear-gradient(to right, " + gradientCSS(stops) + ")";
+    gradWrap.appendChild(grad);
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    const name = document.createElement("span");
+    name.className = "name";
+    name.textContent = p.name ?? "(unnamed)";
+    const author = document.createElement("span");
+    author.className = "author";
+    author.textContent = p.author ?? "";
+    meta.appendChild(name);
+    if (p.author) meta.appendChild(author);
+
+    row.appendChild(gradWrap);
+    row.appendChild(meta);
+    return row;
+  }
+
+  function makeCategoryBlock(key, items) {
+    const details = document.createElement("details");
+    details.className = "category";
+    details.open = items.length > 0; // open non-empty categories by default
+
+    const summary = document.createElement("summary");
+    const chev = document.createElement("span");
+    chev.className = "chev";
+    const title = document.createElement("span");
+    title.textContent = CATEGORY_LABEL[key] ?? key;
+    const count = document.createElement("span");
+    count.className = "count";
+    count.textContent = `(${items.length})`;
+
+    summary.appendChild(chev);
+    summary.appendChild(title);
+    summary.appendChild(count);
+    details.appendChild(summary);
+
+    const body = document.createElement("div");
+    body.className = "cat-body";
+    if (items.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "No palettes in this category.";
+      body.appendChild(empty);
+    } else {
+      for (const p of items) {
+        body.appendChild(makePaletteRow(p));
+      }
+    }
+
+    details.appendChild(body);
+    return details;
+  }
+
+  function renderCategories(palettes) {
+    // Group by class; default to 'gradient' if missing.
+    // Accept both "thematic" and "themed" as "themed".
+    const groups = new Map();
+    for (const k of CATEGORY_KEYS) groups.set(k, []);
+    for (const p of palettes) {
+      let cls = (p.class || "gradient").toLowerCase();
+      if (cls === "thematic") cls = "themed"; // map to requested label
+      if (!groups.has(cls)) cls = "gradient";
+      groups.get(cls).push(p);
+    }
+
+    const container = document.getElementById("categories");
+    container.innerHTML = "";
+    for (const key of CATEGORY_KEYS) {
+      const block = makeCategoryBlock(key, groups.get(key) || []);
+      container.appendChild(block);
+    }
+  }
+
+  async function autoload() {
+    const errorBox = document.getElementById("errorBox");
+    errorBox.style.display = "none";
+    errorBox.textContent = "";
+
+    try {
+      const resp = await fetch("cpt_city_selection.json", { cache: "no-store" });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      if (!Array.isArray(data)) throw new Error("JSON root must be an array of palettes.");
+      renderCategories(data);
+    } catch (err) {
+      errorBox.textContent = `Failed to load cpt_city_selection.json: ${err.message}`;
+      errorBox.style.display = "block";
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", autoload);
+</script>
+</body>
+</html>
