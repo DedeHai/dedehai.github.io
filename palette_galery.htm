@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NEW DOWNLOADABLE WLED PALETTES</title>
+  <title>NEW WLED PALETTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root{
@@ -127,7 +127,6 @@
       font-size: 0.92rem;
     }
     .name { color: var(--text); }
-    .author::before { content: "• "; color: #ffffff28; }
 
     .empty {
       color: var(--muted);
@@ -160,8 +159,7 @@
 <body>
 <header>
   <div class="head-inner">
-    <h1>NEW DOWNLOADABLE WLED PALETTES</h1>
-    <div class="hint">Autoloads cpt_city_selection.json from the same folder.</div>
+    <h1>WLED PALETTES HAND PICKED FROM GPT CITY - FREE TO USE</h1>
   </div>
 </header>
 
@@ -236,11 +234,7 @@
     const name = document.createElement("span");
     name.className = "name";
     name.textContent = p.name ?? "(unnamed)";
-    const author = document.createElement("span");
-    author.className = "author";
-    author.textContent = p.author ?? "";
     meta.appendChild(name);
-    if (p.author) meta.appendChild(author);
 
     row.appendChild(gradWrap);
     row.appendChild(meta);
@@ -250,7 +244,7 @@
   function makeCategoryBlock(key, items) {
     const details = document.createElement("details");
     details.className = "category";
-    details.open = items.length > 0; // open non-empty categories by default
+    // do not set details.open => collapsed by default
 
     const summary = document.createElement("summary");
     const chev = document.createElement("span");
@@ -309,7 +303,7 @@
     errorBox.textContent = "";
 
     try {
-      const resp = await fetch("cpt_city_selection.json", { cache: "no-store" });
+      const resp = await fetch("./cpt_city_selection.json", { cache: "no-store" });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json();
       if (!Array.isArray(data)) throw new Error("JSON root must be an array of palettes.");
