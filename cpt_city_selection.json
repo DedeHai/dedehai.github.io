@@ -17516,77 +17516,6 @@
     "class": "monochrome"
   },
   {
-    "name": "hallows",
-    "author": "Peggy Jentoft",
-    "colors": [
-      {
-        "pos": 0,
-        "rgb": "080808"
-      },
-      {
-        "pos": 20,
-        "rgb": "fc5e08"
-      },
-      {
-        "pos": 26,
-        "rgb": "f7c02d"
-      },
-      {
-        "pos": 36,
-        "rgb": "120b08"
-      },
-      {
-        "pos": 50,
-        "rgb": "f89f20"
-      },
-      {
-        "pos": 63,
-        "rgb": "301608"
-      },
-      {
-        "pos": 92,
-        "rgb": "fbd819"
-      },
-      {
-        "pos": 117,
-        "rgb": "574514"
-      },
-      {
-        "pos": 151,
-        "rgb": "fad41c"
-      },
-      {
-        "pos": 166,
-        "rgb": "fb6e0a"
-      },
-      {
-        "pos": 188,
-        "rgb": "381908"
-      },
-      {
-        "pos": 202,
-        "rgb": "f8a723"
-      },
-      {
-        "pos": 218,
-        "rgb": "1b170b"
-      },
-      {
-        "pos": 229,
-        "rgb": "f7c02d"
-      },
-      {
-        "pos": 242,
-        "rgb": "cb4c08"
-      },
-      {
-        "pos": 255,
-        "rgb": "080808"
-      }
-    ],
-    "class": "monochrome"
-  },
-  {
     "name": "chrome",
     "author": "David Gowers",
     "colors": [
@@ -26342,6 +26271,77 @@
       {
         "pos": 255,
         "rgb": "ffffff"
+      }
+    ],
+    "class": "thematic"
+  },
+  {
+    "name": "hallows",
+    "author": "Peggy Jentoft",
+    "colors": [
+      {
+        "pos": 0,
+        "rgb": "080808"
+      },
+      {
+        "pos": 20,
+        "rgb": "fc5e08"
+      },
+      {
+        "pos": 26,
+        "rgb": "f7c02d"
+      },
+      {
+        "pos": 36,
+        "rgb": "120b08"
+      },
+      {
+        "pos": 50,
+        "rgb": "f89f20"
+      },
+      {
+        "pos": 63,
+        "rgb": "301608"
+      },
+      {
+        "pos": 92,
+        "rgb": "fbd819"
+      },
+      {
+        "pos": 117,
+        "rgb": "574514"
+      },
+      {
+        "pos": 151,
+        "rgb": "fad41c"
+      },
+      {
+        "pos": 166,
+        "rgb": "fb6e0a"
+      },
+      {
+        "pos": 188,
+        "rgb": "381908"
+      },
+      {
+        "pos": 202,
+        "rgb": "f8a723"
+      },
+      {
+        "pos": 218,
+        "rgb": "1b170b"
+      },
+      {
+        "pos": 229,
+        "rgb": "f7c02d"
+      },
+      {
+        "pos": 242,
+        "rgb": "cb4c08"
+      },
+      {
+        "pos": 255,
+        "rgb": "080808"
       }
     ],
     "class": "thematic"
