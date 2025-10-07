@@ -10,7 +10,6 @@
       --panel: #161925;
       --text: #e6e6ea;
       --muted: #9aa0ac;
-      --accent: #6ba8ff;
       --border: #2a2f3d;
     }
     html,body { height: 100%; }
@@ -111,10 +110,12 @@
       justify-content: center;
       align-items: center;
     }
+    /* Desktop/tablet default: center with min width 600, but responsive width */
     .grad {
       height: 40px;
       min-width: 600px;
       width: min(90vw, 900px);
+      max-width: 100%;
       border-radius: 6px;
       border: 1px solid #00000040;
       outline: 1px solid #ffffff18;
@@ -122,11 +123,15 @@
     .meta {
       display: flex;
       justify-content: center;
-      gap: 14px;
+      gap: 10px;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.95rem;
+      flex-wrap: wrap;
+      text-align: center;
     }
     .name { color: var(--text); }
+    .author { color: var(--muted); }
+    .author::before { content: "• "; color: #ffffff28; }
 
     .empty {
       color: var(--muted);
@@ -150,16 +155,18 @@
       margin: 16px 0;
     }
 
+    /* Mobile: let the gradient stretch to the screen width instead of forcing 600px */
     @media (max-width: 640px) {
-      .grad { min-width: 600px; width: 600px; }
-      body { overflow-x: auto; }
+      .grad { min-width: 0; width: 100%; }
+      .meta { font-size: 0.92rem; }
     }
   </style>
 </head>
 <body>
 <header>
   <div class="head-inner">
-    <h1>WLED PALETTES HAND PICKED FROM CPT-CITY - FREE TO USE</h1>
+    <h1>WLED PALETTES HAND PICKED FROM CPT-CITY</h1>
+	<h2>All palettes are license free</h2>
   </div>
 </header>
 
@@ -235,6 +242,13 @@
     name.textContent = p.name ?? "(unnamed)";
     meta.appendChild(name);
 
+    if (p.author) {
+      const author = document.createElement("span");
+      author.className = "author";
+      author.textContent = p.author;
+      meta.appendChild(author);
+    }
+
     row.appendChild(gradWrap);
     row.appendChild(meta);
     return row;
@@ -243,7 +257,7 @@
   function makeCategoryBlock(key, items) {
     const details = document.createElement("details");
     details.className = "category";
-    // do not set details.open => collapsed by default
+    // collapsed by default
 
     const summary = document.createElement("summary");
     const chev = document.createElement("span");
@@ -317,4 +331,3 @@
 </script>
 </body>
 </html>
-
