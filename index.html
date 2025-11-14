@@ -1,1 +1,479 @@
-<h1>Hello World!</h1>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DedeHai — Repository Files</title>
+
+  <!-- Optional webfont. If you prefer to keep everything local, remove this link. -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b0f12;
+      --card:#0f1518;
+      --muted:#9aa6ad;
+      --accent-1:#00d9ff;   /* cyan */
+      --accent-2:#ff7a00;   /* orange */
+      --glow: 0 8px 30px rgba(0,217,255,0.08), 0 2px 6px rgba(255,122,0,0.04);
+      --glass: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      color-scheme: dark;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background:
+        radial-gradient(800px 400px at 10% 10%, rgba(0,217,255,0.02), transparent 6%),
+        radial-gradient(700px 350px at 90% 90%, rgba(255,122,0,0.02), transparent 6%),
+        var(--bg);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color:#e6eef1;
+      line-height:1.4;
+      padding:32px;
+      box-sizing:border-box;
+    }
+
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+    }
+
+    header.appbar{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin-bottom:22px;
+    }
+
+    .logo{
+      width:64px;
+      height:64px;
+      border-radius:12px;
+      display:inline-grid;
+      place-items:center;
+      background: linear-gradient(135deg,var(--accent-1),var(--accent-2));
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6), 0 4px 14px rgba(0,217,255,0.06);
+      position:relative;
+      flex-shrink:0;
+    }
+    .logo::after{
+      content:"";
+      position:absolute;
+      inset:1px;
+      border-radius:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.0));
+      mix-blend-mode: overlay;
+    }
+    .logo svg { width:36px; height:36px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+
+    h1{
+      margin:0;
+      font-size:20px;
+      letter-spacing:-0.01em;
+      font-weight:700;
+    }
+    .subtitle{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:4px;
+    }
+
+    main.card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.007));
+      border-radius:12px;
+      padding:18px;
+      box-shadow: var(--glow);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .controls{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+
+    .search{
+      flex:1;
+      background: rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.02);
+      padding:8px 12px;
+      border-radius:8px;
+      color:inherit;
+      outline:none;
+      transition:box-shadow .15s, border-color .15s;
+    }
+    .search:focus{
+      box-shadow: 0 6px 20px rgba(0,217,255,0.06);
+      border-color: rgba(0,217,255,0.22);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .meta{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .list{
+      margin-top:12px;
+      display:grid;
+      gap:8px;
+    }
+
+    .file-row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.005), transparent);
+      border:1px solid rgba(255,255,255,0.02);
+      transition: transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .file-row:hover{
+      transform:translateY(-3px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.6), 0 4px 14px rgba(0,217,255,0.03);
+      border-color: rgba(0,217,255,0.08);
+    }
+
+    .file-icon{
+      width:44px;
+      height:44px;
+      min-width:44px;
+      border-radius:8px;
+      display:grid;
+      place-items:center;
+      font-weight:700;
+      color:rgba(10,10,10,0.95);
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+      box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+      font-size:12px;
+    }
+    .file-info{
+      flex:1;
+      min-width:0;
+    }
+    .file-name{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:600;
+      font-size:15px;
+      color:#e8f8ff;
+    }
+    .file-path{
+      font-size:12px;
+      color:var(--muted);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .file-meta{
+      font-size:12px;
+      color:var(--muted);
+      text-align:right;
+      min-width:110px;
+    }
+
+    .dir-section{
+      margin-top:6px;
+      border-radius:8px;
+      padding:8px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.006), transparent);
+      border:1px dashed rgba(255,255,255,0.02);
+    }
+
+    .spinner {
+      display:inline-block;
+      width:14px;
+      height:14px;
+      border:2px solid rgba(255,255,255,0.08);
+      border-top-color: var(--accent-1);
+      border-radius:50%;
+      animation:spin 1s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer {
+      margin-top:18px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+    }
+
+    /* responsive */
+    @media (max-width:640px){
+      .file-meta{ display:none; }
+      .logo{ width:52px; height:52px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="appbar">
+      <div class="logo" aria-hidden="true">
+        <!-- stylized DH monogram similar to WLED neon badge -->
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="6" y="6" width="52" height="52" rx="10" fill="white" opacity="0.06"/>
+          <path d="M18 22v20h6V34h8v8h6V22H18z" fill="#021012" />
+          <path d="M18 22v20h6V34h8v8h6V22H18z" stroke="white" stroke-opacity="0.08"/>
+        </svg>
+      </div>
+
+      <div>
+        <h1>DedeHai — Repository Files</h1>
+        <div class="subtitle">A clean, WLED-inspired listing of all public files in this repository.</div>
+      </div>
+    </header>
+
+    <main class="card" role="main" aria-live="polite">
+      <div class="controls">
+        <input id="search" class="search" placeholder="Filter files (name or path) — try 'css', 'js', or 'assets/'" />
+        <div class="meta" id="status">Loading <span class="spinner" id="spinner"></span></div>
+      </div>
+
+      <div id="content" class="list" aria-busy="true"></div>
+
+      <div id="empty" class="dir-section" style="display:none">
+        <div class="file-path">No files found or repository is private.</div>
+      </div>
+    </main>
+
+    <footer>
+      <div id="footer-left">Repository: DedeHai/dedehai.github.io</div>
+      <div id="footer-right">Branch: <span id="branch">—</span></div>
+    </footer>
+  </div>
+
+<script>
+(async function(){
+  const owner = "DedeHai";
+  const repo = "dedehai.github.io";
+  const contentEl = document.getElementById('content');
+  const spinner = document.getElementById('spinner');
+  const status = document.getElementById('status');
+  const footerBranch = document.getElementById('branch');
+  const searchInput = document.getElementById('search');
+  const emptyEl = document.getElementById('empty');
+
+  function humanBytes(bytes){
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B','KB','MB','GB','TB'];
+    const i = Math.floor(Math.log(bytes)/Math.log(k));
+    return parseFloat((bytes / Math.pow(k,i)).toFixed(1)) + ' ' + sizes[i];
+  }
+
+  function iconFor(name){
+    const ext = name.split('.').pop().toLowerCase();
+    if (name.includes('/')) {
+      return 'F';
+    }
+    if (['png','jpg','jpeg','gif','webp','svg'].includes(ext)) return '🖼';
+    if (['css'].includes(ext)) return 'CSS';
+    if (['js','mjs','cjs'].includes(ext)) return 'JS';
+    if (['html','htm'].includes(ext)) return 'HTM';
+    if (['md','markdown'].includes(ext)) return 'MD';
+    if (['json','yaml','yml','toml'].includes(ext)) return '⚙️';
+    if (['zip','tar','gz','7z'].includes(ext)) return 'ZIP';
+    if (['pdf'].includes(ext)) return 'PDF';
+    if (['txt','log'].includes(ext)) return 'TXT';
+    return 'TXT';
+  }
+
+  function renderNodes(nodes){
+    contentEl.innerHTML = '';
+    if (!nodes || nodes.length === 0){
+      emptyEl.style.display = '';
+      contentEl.setAttribute('aria-busy','false');
+      return;
+    }
+    emptyEl.style.display = 'none';
+    const frag = document.createDocumentFragment();
+
+    for (const node of nodes){
+      if (node.type === 'dir'){
+        const section = document.createElement('div');
+        section.className = 'dir-section';
+        const header = document.createElement('div');
+        header.style.fontWeight = '700';
+        header.style.color = '#dffbff';
+        header.style.marginBottom = '8px';
+        header.textContent = '/' + node.name;
+        section.appendChild(header);
+
+        if (node.children && node.children.length){
+          for (const f of node.children){
+            const row = createFileRow(f);
+            section.appendChild(row);
+          }
+        } else {
+          const note = document.createElement('div');
+          note.className = 'file-path';
+          note.textContent = '(empty)';
+          section.appendChild(note);
+        }
+        frag.appendChild(section);
+      } else {
+        frag.appendChild(createFileRow(node));
+      }
+    }
+
+    contentEl.appendChild(frag);
+    contentEl.setAttribute('aria-busy','false');
+  }
+
+  function createFileRow(node){
+    // skip listing index.html (this listing page)
+    if (node.name.toLowerCase() === 'index.html' && (node.path === 'index.html' || node.path.endsWith('/index.html'))) {
+      const empty = document.createElement('div');
+      empty.style.display = 'none';
+      return empty;
+    }
+
+    const row = document.createElement('div');
+    row.className = 'file-row';
+
+    const icon = document.createElement('div');
+    icon.className = 'file-icon';
+    const iconText = iconFor(node.name);
+    icon.textContent = iconText;
+    row.appendChild(icon);
+
+    const info = document.createElement('div');
+    info.className = 'file-info';
+
+    const name = document.createElement('div');
+    name.className = 'file-name';
+
+    const a = document.createElement('a');
+    a.href = './' + node.path;
+    a.textContent = node.name;
+    a.style.color = 'inherit';
+    a.style.textDecoration = 'none';
+    a.target = '_self';
+    name.appendChild(a);
+
+    info.appendChild(name);
+
+    const path = document.createElement('div');
+    path.className = 'file-path';
+    path.textContent = node.path;
+    info.appendChild(path);
+
+    row.appendChild(info);
+
+    const meta = document.createElement('div');
+    meta.className = 'file-meta';
+    if (node.type === 'file'){
+      meta.textContent = humanBytes(node.size || 0);
+    } else {
+      meta.textContent = 'dir';
+    }
+    row.appendChild(meta);
+
+    return row;
+  }
+
+  // recursively list directory contents using contents API
+  async function listContents(path = ''){
+    const repoResp = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+    if (!repoResp.ok) throw new Error('Could not fetch repo metadata: ' + repoResp.status);
+    const repoData = await repoResp.json();
+    const branch = repoData.default_branch || 'main';
+    footerBranch.textContent = branch;
+
+    async function walk(p = ''){
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(p)}?ref=${encodeURIComponent(branch)}`;
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        // if 404 on empty repo or private, propagate
+        throw new Error('Failed to list ' + (p || '/') + ': ' + resp.status + ' ' + resp.statusText);
+      }
+      const items = await resp.json();
+      if (!Array.isArray(items)) return [];
+
+      // sort: dirs first, alphabetically
+      items.sort((a,b)=> {
+        if (a.type === b.type) return a.name.localeCompare(b.name);
+        return a.type === 'dir' ? -1 : 1;
+      });
+
+      const results = [];
+      for (const it of items){
+        if (it.type === 'dir'){
+          const children = await walk(it.path);
+          results.push({ type: 'dir', name: it.name, path: it.path, children });
+        } else if (it.type === 'file'){
+          results.push({ type: 'file', name: it.name, path: it.path, size: it.size });
+        }
+      }
+      return results;
+    }
+
+    return walk(path);
+  }
+
+  try {
+    status.textContent = 'Loading';
+    spinner.style.display = 'inline-block';
+    const tree = await listContents('');
+    spinner.style.display = 'none';
+    status.textContent = 'Files loaded';
+    renderNodes(tree);
+
+    // flatten files for search
+    let flat = [];
+    function flatten(nodes){
+      for (const n of nodes){
+        if (n.type === 'file') flat.push(n);
+        if (n.type === 'dir') {
+          flatten(n.children || []);
+        }
+      }
+    }
+    flatten(tree);
+
+    searchInput.addEventListener('input', (e) =>{
+      const q = e.target.value.trim().toLowerCase();
+      if (!q){
+        renderNodes(tree);
+        return;
+      }
+      const filtered = flat.filter(f => f.name.toLowerCase().includes(q) || f.path.toLowerCase().includes(q));
+      // show matches grouped by top-level directory
+      const groups = {};
+      for (const f of filtered){
+        const top = f.path.includes('/') ? f.path.split('/')[0] : '';
+        if (!groups[top]) groups[top] = [];
+        groups[top].push(f);
+      }
+      const nodes = [];
+      const topKeys = Object.keys(groups).sort((a,b)=> a.localeCompare(b));
+      for (const k of topKeys){
+        if (k === '') {
+          nodes.push(...groups[k].sort((a,b)=> a.name.localeCompare(b.name)));
+        } else {
+          nodes.push({ type:'dir', name: k, children: groups[k].sort((a,b)=> a.name.localeCompare(b.name)) });
+        }
+      }
+      renderNodes(nodes);
+    });
+
+  } catch (err){
+    spinner.style.display = 'none';
+    contentEl.innerHTML = '<div style="color:#ff9b9b;font-weight:600">Error: ' + (err.message || err) + '</div>';
+    document.getElementById('status').textContent = 'Unable to load files';
+    emptyEl.style.display = '';
+  }
+})();
+</script>
+</body>
+</html>
