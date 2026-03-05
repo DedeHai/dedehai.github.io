@@ -1,0 +1,32 @@
+[
+  {
+    "id": "pixelpaint",
+    "name": "Pixel Paint",
+    "file": "pixelpaint.htm",
+	"url": "https://dedehai.github.io/pixelpaint.htm.gz",
+    "author": "@dedehai",
+	"source": "https://github.com/DedeHai/WLED-Tools",
+    "desc": "Interactive paint tool: color your strips or matrix and save as GIFs or presets.",
+    "ver": "1.11"
+  },
+  {
+    "id": "videolab",
+    "name": "Video Lab",
+    "file": "videolab.htm",
+    "url": "https://dedehai.github.io/videolab.htm.gz",
+	"author": "@dedehai",
+    "source": "https://github.com/DedeHai/WLED-Tools",
+	"desc": "Stream videos and generate animated GIFs",
+    "ver": "0.92"
+  },
+  {
+    "id": "pxmagic",
+    "name": "Pixel Magic Tool",
+    "file": "pxmagic.htm",
+    "url": "https://dedehai.github.io/pxmagic.htm.gz",
+	"author": "@ajotanc",
+	"source": "https://github.com/ajotanc/PixelMagicTool",
+    "desc": "Classic pixel art editor",
+    "ver": "1.0"
+  }
+]
