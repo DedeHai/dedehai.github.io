@@ -22,6 +22,17 @@
 	"wled_min": "16.0"
   },
   {
+    "id": "fontfactory",
+    "name": "Font Factory",
+    "file": "fontfactory.htm",
+    "url": "https://dedehai.github.io/fontfactory.htm.gz",
+    "author": "@dedehai",
+    "source": "https://github.com/DedeHai/WLED-Tools",
+    "desc": "Create your own fonts for Scrolling Text FX from ttf, otf, or bdf files",
+    "ver": "1.0",
+	"wled_min": "16.0"
+  },
+  {
     "id": "pxmagic",
     "name": "Pixel Magic Tool",
     "file": "pxmagic.htm",
